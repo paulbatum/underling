@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "docker-build",
+			"label": "docker-build",
+			"platform": "python",
+			"dockerBuild": {
+				"tag": "paulbatum/underling:latest",
+				"dockerfile": "${workspaceFolder}/Dockerfile",
+				"context": "${workspaceFolder}",
+				"pull": true
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: debug",
+			"dockerRun": {
+				"envFiles": [
+					".env"
+				],
+				"ports": [{ "containerPort": 5678, "hostPort": 5678}]
+			},
+			"dependsOn": [
+				"docker-build"
+			],
+			"python": {
+				"file": "app/main.py"
+			}
+		}
+	]
+}
