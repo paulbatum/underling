@@ -1,1 +1,1 @@
-docker run -it --env-file .env --entrypoint sh paulbatum/underling
+docker run -it --env-file .env --entrypoint bash underling/debug

@@ -1,1 +1,0 @@
-Your first task is to inspect the readme.txt file for instructions and follow them. To do so your next response should be a command that prints out the contents of readme.txt.
