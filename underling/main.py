@@ -1,5 +1,4 @@
 import subprocess
-import re
 
 from langchain.agents import load_tools
 from langchain.agents import initialize_agent, Tool
@@ -16,8 +15,6 @@ def executeShellCommand(command: str) -> str:
     else:
         output += result.stdout + "\n" + result.stderr
     return output
-
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.0)
 
 execute_tool = Tool(
     name = "Execute",
@@ -40,6 +37,8 @@ help_tool = Tool(
 )
 
 tools = [execute_tool, help_tool]
+
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.0)
 agent = initialize_agent(tools, llm,agent="zero-shot-react-description", verbose=True, max_iterations=10)
 
 intro = """
