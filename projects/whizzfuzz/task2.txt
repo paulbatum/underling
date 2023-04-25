@@ -1,2 +1,1 @@
-Modify the fizzbuzz program to say "whizz" instead of "fizz" and "fuzz" instead of "buzz" and then run it.
-Reflect on the the intention of the task, and check the output to confirm you performed it correctly. Try again if unsuccessful.
+Go to the whizzfuzz project and modify the fizzbuzz.py program to say "whizz" instead of "fizz" and "fuzz" instead of "buzz".

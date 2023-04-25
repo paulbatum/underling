@@ -1,0 +1,192 @@
+Run through the whizzfuzz demo scenario? (y/n)y
+Create a python program called fizzbuzz.py in the whizzfuzz project directory that completes the classic programming task "fizzbuzz" to 20. Verify the task is complete by inspecting the output when the program is run - confirm it follows the rules of fizzbuzz.
+
+
+> Entering new AgentExecutor chain...
+Thought: I need to create a directory for the whizzfuzz project and change into it before creating the python program.
+Action: Change Working Directory
+Action Input: /projects
+
+Observation:NoneNow that I'm in the /projects directory, I can create the whizzfuzz project directory.
+Action: Execute
+Action Input: mkdir whizzfuzz
+> mkdir whizzfuzz
+
+
+Observation:
+mkdir: cannot create directory ‘whizzfuzz’: File exists
+It looks like the whizzfuzz directory already exists, so I can change into it and create the fizzbuzz.py program.
+Action: Change Working Directory
+Action Input: /projects/whizzfuzz
+
+Observation:NoneNow that I'm in the whizzfuzz directory, I can create the fizzbuzz.py program using echo and piping it into a file.
+Action: Execute
+Action Input: echo "for i in range(1,21):\n\tif i%3==0 and i%5==0:\n\t\tprint('FizzBuzz')\n\telif i%3==0:\n\t\tprint('Fizz')\n\telif i%5==0:\n\t\tprint('Buzz')\n\telse:\n\t\tprint(i)" > fizzbuzz.py
+> echo "for i in range(1,21):
+        if i%3==0 and i%5==0:
+                print('FizzBuzz')
+        elif i%3==0:
+                print('Fizz')
+        elif i%5==0:
+                print('Buzz')
+        else:
+                print(i)" > fizzbuzz.py
+
+
+Observation:I need to verify that the fizzbuzz.py program works correctly.
+Action: Execute
+Action Input: python fizzbuzz.py
+> python fizzbuzz.py
+
+
+Observation:1
+2
+Fizz
+4
+Buzz
+Fizz
+7
+8
+Fizz
+Buzz
+11
+Fizz
+13
+14
+FizzBuzz
+16
+17
+Fizz
+19
+Buzz
+It looks like the program is working correctly. I just need to double check my work before submitting.
+Action: Execute
+Action Input: cat fizzbuzz.py
+> cat fizzbuzz.py
+
+
+Observation:for i in range(1,21):
+        if i%3==0 and i%5==0:
+                print('FizzBuzz')
+        elif i%3==0:
+                print('Fizz')
+        elif i%5==0:
+                print('Buzz')
+        else:
+                print(i)
+I think I have completed the task, I need to double check my work.
+Action: Execute
+Action Input: python fizzbuzz.py
+> python fizzbuzz.py
+
+
+Observation:1
+2
+Fizz
+4
+Buzz
+Fizz
+7
+8
+Fizz
+Buzz
+11
+Fizz
+13
+14
+FizzBuzz
+16
+17
+Fizz
+19
+Buzz
+I have completed the task and double checked my work.
+Task Complete: done
+
+> Finished chain.
+Total Tokens: 5433
+Prompt Tokens: 5106
+Completion Tokens: 327
+Total Cost (USD): $0.010866
+Go to the whizzfuzz project and modify the fizzbuzz.py program to say "whizz" instead of "fizz" and "fuzz" instead of "buzz".
+
+
+> Entering new AgentExecutor chain...
+Thought: I need to navigate to the whizzfuzz project directory and find the fizzbuzz.py file.
+Action: Change Working Directory
+Action Input: /projects/whizzfuzz
+
+Observation:NoneNow that I'm in the whizzfuzz project directory, I need to find the fizzbuzz.py file and modify it.
+Action: Execute
+Action Input: ls
+> ls
+
+
+Observation:fizzbuzz.py
+task1.txt
+task2.txt
+Great, I found the fizzbuzz.py file. Now I need to modify it to say "whizz" instead of "fizz" and "fuzz" instead of "buzz".
+Action: Execute
+Action Input: sed -i 's/fizz/whizz/g; s/buzz/fuzz/g' fizzbuzz.py
+> sed -i 's/fizz/whizz/g; s/buzz/fuzz/g' fizzbuzz.py
+
+
+Observation:I need to double check my work to make sure the changes were made correctly.
+Action: Execute
+Action Input: cat fizzbuzz.py
+> cat fizzbuzz.py
+
+
+Observation:for i in range(1,21):
+        if i%3==0 and i%5==0:
+                print('FizzBuzz')
+        elif i%3==0:
+                print('Fizz')
+        elif i%5==0:
+                print('Buzz')
+        else:
+                print(i)
+It looks like the changes were not made correctly. I need to try again.
+Action: Execute
+Action Input: sed -i 's/Fizz/Whizz/g; s/Buzz/Fuzz/g' fizzbuzz.py
+> sed -i 's/Fizz/Whizz/g; s/Buzz/Fuzz/g' fizzbuzz.py
+
+
+Observation:I need to double check my work again to make sure the changes were made correctly this time.
+Action: Execute
+Action Input: cat fizzbuzz.py
+> cat fizzbuzz.py
+
+
+Observation:for i in range(1,21):
+        if i%3==0 and i%5==0:
+                print('WhizzFuzz')
+        elif i%3==0:
+                print('Whizz')
+        elif i%5==0:
+                print('Fuzz')
+        else:
+                print(i)
+I think I have completed the task, I need to double check my work.
+Action: Execute
+Action Input: cat fizzbuzz.py
+> cat fizzbuzz.py
+
+
+Observation:for i in range(1,21):
+        if i%3==0 and i%5==0:
+                print('WhizzFuzz')
+        elif i%3==0:
+                print('Whizz')
+        elif i%5==0:
+                print('Fuzz')
+        else:
+                print(i)
+I have completed the task and double checked my work.
+Task Complete: done
+
+> Finished chain.
+Total Tokens: 5185
+Prompt Tokens: 4902
+Completion Tokens: 283
+Total Cost (USD): $0.01037
