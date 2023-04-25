@@ -186,7 +186,7 @@ answer = input("Run through the whizzfuzz demo scenario? (y/n)")
 if answer.lower() == 'y':
     runWhizzFuzz()
 else:
-    runUserInputLoop
+    runUserInputLoop()
 
 
 
