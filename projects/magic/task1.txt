@@ -1,0 +1,1 @@
+Write and execute a program that outputs the full schema of /projects/magic/resources/2ED.json, but not the contents because the file is large. Then use that information to write and execute another program to determine the artist of the magic card Grizzly Bears.

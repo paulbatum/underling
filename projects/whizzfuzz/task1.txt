@@ -1,1 +1,1 @@
-Create a python program called fizzbuzz.py in the whizzfuzz project directory that completes the classic programming task "fizzbuzz" to 20. Verify the task is complete by inspecting the output when the program is run - confirm it follows the rules of fizzbuzz.
+Create a python program called fizzbuzz.py in the whizzfuzz project directory that completes the classic programming task "FizzBuzz" to 20.

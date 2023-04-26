@@ -3,6 +3,7 @@ import re
 import os
 
 from typing import List, Union
+
 from langchain import LLMChain
 from langchain.agents import load_tools, Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.chat_models import ChatOpenAI
@@ -10,6 +11,29 @@ from langchain.callbacks import get_openai_callback
 from langchain.prompts import StringPromptTemplate
 from langchain.tools import BaseTool
 from langchain.schema import AgentAction, AgentFinish
+
+import traceback
+from io import StringIO
+from contextlib import redirect_stdout
+
+def execPythonCommand(command: str) -> str:
+    command = command.strip().strip('`').strip().replace("\\n", "\n")
+    outString = StringIO()
+    with redirect_stdout(outString):
+        try:
+            exec(command)
+            result = outString.getvalue()
+        except Exception:
+            print(traceback.format_exc())
+    output = outString.getvalue()
+    output = "Error, output exceeded maximum allowable length." if len(output) > 1000 else output
+    return output
+
+exec_python_tool = Tool(
+    name = "Execute Python Code",
+    func = execPythonCommand,
+    description = "Does an exec of the specified python code and returns the output. Input must be valid python."
+)
 
 def executeShellCommand(command: str) -> str:
     command = command.strip().strip('`').strip().replace("\\n", "\n").replace("\\t", "\t")
@@ -20,10 +44,12 @@ def executeShellCommand(command: str) -> str:
         output += result.stdout
     else:
         output += result.stdout + "\n" + result.stderr
+
+    output = "Error, output exceeded maximum allowable length." if len(output) > 1000 else output
     return output
 
-execute_tool = Tool(
-    name = "Execute",
+execute_shell_tool = Tool(
+    name = "Execute Shell Command",
     func = executeShellCommand,
     description = """
         Executes the specified bash command and outputs stdout/stderr.
@@ -55,13 +81,13 @@ change_working_directory_tool = Tool(
     description = "Changes the current working directory. Input should be an absolute path."
 )
 
-tools = [execute_tool, change_working_directory_tool]#, help_tool]
+tools = [exec_python_tool, execute_shell_tool, change_working_directory_tool]#, help_tool]
 
 template = """Perform the specified task. You have access to the following tools:
 
 {tools}
 
-Use the following format, paying special attention to the casing and punctuation used as part of the prefix for each line. For example, "Task Complete: done" is valid, while "task complete, done" is not.
+Use the following format:
 
 Task: the input task that you must complete
 Thought: you should always think about what to do
@@ -69,10 +95,19 @@ Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times until the task is done)
-Thought: I think I have completed the task, I need to double check my work
-Action: Action to take to double check the work
+
+Once the task appears to be done, its time to perform a verification step, following a similar format to above:
+
+Thought: think about how you will verify the task is complete
+Action: Action to take to perform the verification, should be one of [{tool_names}]
 Action Input: the input to the action
-Task Complete: I have completed the task and double checked my work
+Observation: the result of the action
+
+If the observation indicates the task is not complete, resume work on the task. If the task is complete, follow this format for the final output:
+
+Task Complete: summary of the outcome
+
+Pay special attention to the prefixes used in various lines above. For example, "Task Complete: printed hello world" is valid, while "task complete, printed hello world" is not.
 
 Pay attention to these important tips:
 This chat session is managed by a program running in a container, as a user with limited permissions. You cannot sudo / run as root.
@@ -121,7 +156,7 @@ class CustomOutputParser(AgentOutputParser):
             return AgentFinish(
                 # Return values is generally always a dictionary with a single `output` key
                 # It is not recommended to try anything else at the moment :)
-                return_values={"output": llm_output.split("Done:")[-1].strip()},
+                return_values={"output": llm_output.split("Task Complete")[-1].strip()},
                 log=llm_output,
             )
         # Parse out the action and action input
@@ -172,6 +207,13 @@ def runWhizzFuzz():
     print(prompt)
     runWithTokenOutput(prompt)
 
+def runMagic():
+    os.chdir("/projects/magic")
+    with open('task1.txt', 'r') as file:
+        prompt = file.read()
+    print(prompt)
+    runWithTokenOutput(prompt)
+
 def runUserInputLoop():
     while True:
         task = input("What would you like me to do?\n")
@@ -182,11 +224,16 @@ def runUserInputLoop():
             print(f"Completion Tokens: {cb.completion_tokens}")
             print(f"Total Cost (USD): ${cb.total_cost}")
 
-answer = input("Run through the whizzfuzz demo scenario? (y/n)")
-if answer.lower() == 'y':
-    runWhizzFuzz()
-else:
-    runUserInputLoop()
+answer = input("""Enter a number to run a predefined scenario or just hit enter to give me your own task:
+1. generate fizzbuzz and then modify into whizzfuzz
+2. extract data from a large json file
+""")
 
-
+match answer:
+    case "1":
+        runWhizzFuzz()
+    case "2":
+        runMagic()
+    case _:
+        runUserInputLoop()
 
