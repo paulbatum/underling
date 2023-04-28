@@ -9,9 +9,9 @@ from langchain.tools import BaseTool
 from langchain.schema import AgentAction, AgentFinish
 from langchain.callbacks import get_openai_callback
 
-from agent_tools import exec_python_tool, execute_shell_tool, change_working_directory_tool
+from agent_tools import execute_shell_tool, change_working_directory_tool
 
-tools = [exec_python_tool, execute_shell_tool, change_working_directory_tool]#, help_tool]
+tools = [execute_shell_tool, change_working_directory_tool]#, help_tool]
 
 template = """You must inspect the work of another LLM and verify that it has been completed as expected. You have the following tools available:
 
@@ -25,15 +25,14 @@ Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times until verification is complete)
-
-Once verification is complete output the following:
 Task Verified: <True or False>. After indicating true or false, you can include additional details regarding your assessment.
 
-Pay special attention to the prefixes used in various lines above. For example, "Task Verified: True." is valid, while "task verified, success." is not.
+Pay special attention to the prefixes used in various lines above. For example, "Task Verified: True." is valid output, while "task verified, success." is not.
 
 Pay attention to these important tips:
 This chat session is managed by a program running in a container, as a user with limited permissions. You cannot sudo / run as root.
 Do not try to use interactive programs like nano or vi.
+Projects are in the /projects directory.
 
 Begin!
 Task to verify: {input}
@@ -103,7 +102,7 @@ agent = LLMSingleActionAgent(
 
 agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, max_iterations=10)
 
-def executeTask(task):
+def verifyTask(task):
     with get_openai_callback() as cb:
         response = agent_executor.run(task)
         print(f"Total Tokens: {cb.total_tokens}")

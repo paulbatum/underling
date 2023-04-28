@@ -7,6 +7,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import StringPromptTemplate
 from langchain.tools import BaseTool
 from langchain.schema import AgentAction, AgentFinish
+from langchain.callbacks import get_openai_callback
 
 from agent_tools import exec_python_tool, execute_shell_tool, change_working_directory_tool
 
@@ -24,16 +25,6 @@ Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times until the task is done)
-
-Once the task appears to be done, its time to perform a verification step, following a similar format to above:
-
-Thought: think about how you will verify the task is complete
-Action: Action to take to perform the verification, should be one of [{tool_names}]
-Action Input: the input to the action
-Observation: the result of the action
-
-If the observation indicates the task is not complete, resume work on the task. If the task is complete, follow this format for the final output:
-
 Task Complete: summary of the outcome
 
 Pay special attention to the prefixes used in various lines above. For example, "Task Complete: printed hello world" is valid, while "task complete, printed hello world" is not.
@@ -110,3 +101,11 @@ agent = LLMSingleActionAgent(
 )
 
 agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, max_iterations=10)
+
+def executeTask(task):
+    with get_openai_callback() as cb:
+        response = agent_executor.run(task)
+        print(f"Total Tokens: {cb.total_tokens}")
+        print(f"Prompt Tokens: {cb.prompt_tokens}")
+        print(f"Completion Tokens: {cb.completion_tokens}")
+        print(f"Total Cost (USD): ${cb.total_cost}")

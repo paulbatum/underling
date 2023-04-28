@@ -1,21 +1,23 @@
-import os
+import glob, os
 from task_agent import executeTask
+from verify_agent import verifyTask
 
 def runWhizzFuzz():
     os.chdir("/projects/whizzfuzz")
-    f = 'fizzbuzz.py'
-    if os.path.exists(f):
+    for f in glob.glob("*.py"):
         os.remove(f)
 
     with open('task1.txt', 'r') as file:
         prompt = file.read()
     print(prompt)
     executeTask(prompt)
+    verifyTask(prompt)
 
     with open('task2.txt', 'r') as file:
         prompt = file.read()
     print(prompt)
     executeTask(prompt)
+    verifyTask(prompt)
 
 def runMagic():
     os.chdir("/projects/magic")
