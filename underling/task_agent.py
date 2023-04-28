@@ -87,7 +87,11 @@ class CustomOutputParser(AgentOutputParser):
         action = match.group(1).strip()
         action_input = match.group(2)
         # Return the action and action input
-        return AgentAction(tool=action, tool_input=action_input.strip(" ").strip('"'), log=llm_output)
+        action_input = action_input.strip()
+        if action_input.startswith('"') and action_input.endswith('"'):
+            action_input=action_input.strip('"')
+
+        return AgentAction(tool=action, tool_input=action_input, log=llm_output)
 
 output_parser = CustomOutputParser()
 
