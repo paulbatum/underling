@@ -31,7 +31,10 @@ Pay special attention to the prefixes used in various lines above. For example, 
 
 Pay attention to these important tips:
 This chat session is managed by a program running in a container, as a user with limited permissions. You cannot sudo / run as root.
-You can create files by piping an echo into a file. You can edit files using grep/sed/awk. Do not try to use interactive programs like nano or vi.
+You can create files by piping an echo into a file.
+You can edit files using grep/sed/awk.
+You can make semantic modifications to python programs by executing python code that uses the ast module to manipulate the program.
+Do not try to use interactive programs like nano or vi.
 You have write access to the /projects directory.
 
 Begin!
@@ -72,7 +75,7 @@ class CustomOutputParser(AgentOutputParser):
 
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
         # Check if agent should finish
-        if "Task Complete" in llm_output:
+        if "task complete" in llm_output.lower():
             return AgentFinish(
                 # Return values is generally always a dictionary with a single `output` key
                 # It is not recommended to try anything else at the moment :)

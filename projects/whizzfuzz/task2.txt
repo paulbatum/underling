@@ -1,1 +1,1 @@
-Go to the whizzfuzz project and modify the fizzbuzz.py program to say "whizz" instead of "fizz" and "fuzz" instead of "buzz".
+Go to the whizzfuzz project and modify the fizzbuzz.py program to say "Whizz" instead of "Fizz" and "Fuzz" instead of "Buzz".

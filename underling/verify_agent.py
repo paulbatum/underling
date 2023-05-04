@@ -17,6 +17,8 @@ template = """You must inspect the work of another LLM and verify that it has be
 
 {tools}
 
+Keep in mind that the purpose of these tools is to perform verification, not make fixes. It is not your job to correct the problem, just identify if a problem exists.
+
 Use the following format:
 
 Verify: description of the expected work that you are verifying
@@ -25,6 +27,8 @@ Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times until verification is complete)
+
+Once you have determined whether the task was completed successfully, do not output an action. Instead, use the following output format:
 Task Verified: <True or False>. After indicating true or false, you can include additional details regarding your assessment.
 
 Pay special attention to the prefixes used in various lines above. For example, "Task Verified: True." is valid output, while "task verified, success." is not.
